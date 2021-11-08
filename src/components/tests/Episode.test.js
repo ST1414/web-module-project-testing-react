@@ -50,7 +50,6 @@ test("renders default image when image is not defined", ()=>{
 
     // Act
     const altTag = screen.getByAltText(/stranger_things.png/i);
-    //console.log('MY LOG: ', altTag);
 
     //Assert
     expect(altTag).toBeInTheDocument();
