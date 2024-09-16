@@ -8,7 +8,16 @@ const testEpisode = {
     image: "http://static.tvmaze.com/uploads/images/medium_landscape/67/168918.jpg",
     season: 1,
     number: 1,
-    summary: "",
+    summary: "I like Bacon",
+    runtime: 1
+}
+const testEpisode2 = {
+    id:1,
+    name: "",
+    image: "",
+    season: 1,
+    number: 1,
+    summary: "I like Bacon",
     runtime: 1
 }
 
@@ -17,15 +26,35 @@ const testEpisodeWithoutImage = {
 }
 
 test("renders without error", () => {
-
+    // Arrange
+    render(<Episode episode={testEpisode}/>)
 });
 
 test("renders the summury test passed as prop", ()=>{
+    // Arrange
+    render(<Episode episode={testEpisode}/>)
+
+    // Act - NOTE: Can't use findBy bc it always EXPECTS a promise first
+    const summary = screen.getByText(/i like bacon/i); 
     
+    // Assert
+    expect(summary).toBeInTheDocument();
+    expect(summary).not.toBeNull();
+    expect(summary).toBeTruthy();
+
 });
 
 test("renders default image when image is not defined", ()=>{
-    
+    // Arrange
+    render(<Episode episode={testEpisode2}/>)
+
+    // Act
+    const altTag = screen.getByAltText(/stranger_things.png/i);
+
+    //Assert
+    expect(altTag).toBeInTheDocument();
+
+
 })
 
 //Tasks

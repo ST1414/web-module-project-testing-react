@@ -5,22 +5,65 @@ import userEvent from '@testing-library/user-event';
 import Show from './../Show';
 
 const testShow = {
-    //add in approprate test data structure here.
+    name: 'The Love Boat',
+    summary: "A floating seedy motel", 
+    seasons: [
+        {id: 0, name: 'Season 1', episodes:[]},
+        {id: 1, name: 'Season 2', episodes:[]},
+        {id: 2, name: 'Season 3', episodes:[]}
+    ]
 }
 
 test('renders testShow and no selected Season without errors', ()=>{
+    render(<Show show={testShow} selectedSeason={'none'}/>);
 });
+
 
 test('renders Loading component when prop show is null', () => {
+    
+    render(<Show show={null} selectedSeason={null}/>);
+    const loading = screen.getByTestId('loading-container');
+    expect(loading).toBeInTheDocument();
+
 });
+
 
 test('renders same number of options seasons are passed in', ()=>{
+    
+    render(<Show show={testShow} selectedSeason={'none'}/>);
+    const seasons = screen.getAllByTestId('season-option');
+    expect(seasons.length === 3).toBeTruthy();
+    // expect(seasons.length).toBe(3);
+
 });
+
 
 test('handleSelect is called when an season is selected', () => {
+    // Mock function
+    const fakeHandleSelect = jest.fn( () => {
+        // console.log('CLICK HANDLE CALLED')
+    });
+    
+    render(<Show show={testShow} selectedSeason={'none'} handleSelect={fakeHandleSelect}/>);
+    const selector = screen.getByLabelText(/Select A Season/i);
+    userEvent.selectOptions(selector, '1');
+    expect(fakeHandleSelect).toBeCalled();
+
+
 });
 
+
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
+    // Renders nothing
+    const { rerender } = render(<Show show={testShow} selectedSeason={'none'} />)
+    const episode0 = screen.queryByTestId('episodes-container');
+    expect(episode0).toBeNull();
+
+    // Rerender w. espisode
+    rerender(<Show show={testShow} selectedSeason={'1'} />)
+    const episode1 = screen.queryByTestId('episodes-container');
+    expect(episode1).not.toBeNull();
+
 });
 
 //Tasks:
